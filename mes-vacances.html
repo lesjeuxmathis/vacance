@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Vacances</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a5f3f 0%, #2d7a56 50%, #1e6b47 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Effet emojis scolaires décoratifs en arrière-plan */
+        .floating-emoji {
+            position: fixed;
+            font-size: 28px;
+            animation: floatAround 20s infinite ease-in-out;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Emojis scolaires variés */
+        .floating-emoji:nth-child(1) { top: 5%; left: 8%; animation-delay: 0s; }
+        .floating-emoji:nth-child(2) { top: 15%; right: 12%; animation-delay: 2s; }
+        .floating-emoji:nth-child(3) { top: 25%; left: 75%; animation-delay: 4s; }
+        .floating-emoji:nth-child(4) { top: 35%; right: 20%; animation-delay: 6s; }
+        .floating-emoji:nth-child(5) { top: 45%; left: 15%; animation-delay: 8s; }
+        .floating-emoji:nth-child(6) { top: 55%; right: 70%; animation-delay: 10s; }
+        .floating-emoji:nth-child(7) { top: 65%; left: 60%; animation-delay: 12s; }
+        .floating-emoji:nth-child(8) { top: 75%; right: 25%; animation-delay: 14s; }
+        .floating-emoji:nth-child(9) { bottom: 15%; left: 30%; animation-delay: 16s; }
+        .floating-emoji:nth-child(10) { bottom: 25%; right: 40%; animation-delay: 18s; }
+        .floating-emoji:nth-child(11) { top: 10%; left: 50%; animation-delay: 3s; }
+        .floating-emoji:nth-child(12) { top: 50%; right: 10%; animation-delay: 7s; }
+        .floating-emoji:nth-child(13) { bottom: 30%; left: 70%; animation-delay: 11s; }
+        .floating-emoji:nth-child(14) { top: 70%; right: 55%; animation-delay: 15s; }
+        .floating-emoji:nth-child(15) { bottom: 10%; left: 45%; animation-delay: 19s; }
+        .floating-emoji:nth-child(16) { top: 40%; left: 25%; animation-delay: 5s; }
+        .floating-emoji:nth-child(17) { bottom: 35%; right: 65%; animation-delay: 9s; }
+        .floating-emoji:nth-child(18) { top: 60%; left: 85%; animation-delay: 13s; }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(40px, -50px) rotate(15deg); }
+            50% { transform: translate(-30px, 30px) rotate(-15deg); }
+            75% { transform: translate(50px, 20px) rotate(10deg); }
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 35px;
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            font-size: 3em;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #1a5f3f;
+            margin-bottom: 8px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            color: #4a7c5d;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+        }
+
+        .disclaimer {
+            background: #fff9e6;
+            border: 2px solid #f0ad4e;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            font-size: 0.85em;
+            color: #8a6d3b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .disclaimer-icon {
+            font-size: 1.3em;
+            flex-shrink: 0;
+        }
+
+        .location-info {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid #28a745;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.15);
+        }
+
+        .location-label {
+            color: #1a5f3f;
+            font-weight: 600;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .zone-name {
+            color: #155724;
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #4a7c5d;
+            font-style: italic;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.05em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #32b24a 0%, #228b3b 100%);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .manual-select {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #d4edda;
+        }
+
+        .manual-label {
+            color: #4a7c5d;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #c3e6cb;
+            border-radius: 8px;
+            font-size: 1em;
+            color: #1a5f3f;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        select:hover {
+            border-color: #28a745;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        /* Bannière de cookies */
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #155724;
+            color: white;
+            padding: 20px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .cookie-banner.show {
+            transform: translateY(0);
+        }
+
+        .cookie-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-text {
+            flex: 1;
+            min-width: 250px;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cookie-accept {
+            background: #28a745;
+            color: white;
+        }
+
+        .cookie-accept:hover {
+            background: #218838;
+        }
+
+        .cookie-decline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cookie-decline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            .cookie-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cookie-buttons {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .floating-emoji {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Emojis scolaires flottants en arrière-plan -->
+    <div class="floating-emoji">📚</div>
+    <div class="floating-emoji">✏️</div>
+    <div class="floating-emoji">📝</div>
+    <div class="floating-emoji">📖</div>
+    <div class="floating-emoji">🎒</div>
+    <div class="floating-emoji">📐</div>
+    <div class="floating-emoji">🖊️</div>
+    <div class="floating-emoji">📏</div>
+    <div class="floating-emoji">🧮</div>
+    <div class="floating-emoji">🔬</div>
+    <div class="floating-emoji">🎨</div>
+    <div class="floating-emoji">🖍️</div>
+    <div class="floating-emoji">📊</div>
+    <div class="floating-emoji">🗂️</div>
+    <div class="floating-emoji">📌</div>
+    <div class="floating-emoji">✂️</div>
+    <div class="floating-emoji">🎓</div>
+    <div class="floating-emoji">🏫</div>
+
+    <div class="container">
+        <div class="header-logo">
+            <div class="logo-icon">📅</div>
+            <div>
+                <h1>Mes Vacances</h1>
+            </div>
+        </div>
+        <p class="subtitle">Téléchargez votre calendrier de vacances scolaires</p>
+        
+        <div class="disclaimer">
+            <span class="disclaimer-icon">⚠️</span>
+            <div style="text-align: left;">
+                <strong>Site non officiel :</strong> Ce site n'est pas affilié au gouvernement français ni à l'Éducation nationale. Les données proviennent de sources publiques.
+            </div>
+        </div>
+        
+        <div class="location-info">
+            <div class="location-label">Votre zone détectée</div>
+            <div class="zone-name" id="detectedZone">
+                <span class="loading">Détection en cours...</span>
+            </div>
+        </div>
+
+        <a href="#" class="download-btn" id="downloadBtn" style="display: none;">
+            📥 Télécharger mes vacances
+        </a>
+
+        <div class="manual-select">
+            <div class="manual-label">Ou choisissez manuellement votre zone :</div>
+            <select id="zoneSelect">
+                <option value="">-- Sélectionnez une zone --</option>
+                <option value="Zone-A">📍 Zone A</option>
+                <option value="Zone-B">📍 Zone B</option>
+                <option value="Zone-C">📍 Zone C</option>
+                <option value="Corse">🏝️ Corse</option>
+                <option value="Guadeloupe">🌴 Guadeloupe</option>
+                <option value="Guyane">🌿 Guyane</option>
+                <option value="Martinique">🌺 Martinique</option>
+                <option value="Mayotte">🏖️ Mayotte</option>
+                <option value="NouvelleCaledonie">🌊 Nouvelle Calédonie</option>
+                <option value="Polynesie">🌅 Polynésie</option>
+                <option value="Reunion">🌋 La Réunion</option>
+                <option value="SaintPierreEtMiquelon">❄️ Saint-Pierre-et-Miquelon</option>
+                <option value="WallisEtFutuna">🏝️ Wallis et Futuna</option>
+            </select>
+        </div>
+
+        <div class="error" id="errorMsg"></div>
+    </div>
+
+    <!-- Bannière de cookies -->
+    <div class="cookie-banner" id="cookieBanner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                🍪 Ce site utilise la géolocalisation pour vous proposer automatiquement le calendrier de vacances de votre zone scolaire. Aucune donnée personnelle n'est stockée ni partagée. En continuant, vous acceptez l'utilisation de la géolocalisation.
+            </div>
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-accept" onclick="acceptCookies()">Accepter</button>
+                <button class="cookie-btn cookie-decline" onclick="declineCookies()">Refuser</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const calendriers = {
+            'Zone-A': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Zone-A.ics',
+            'Zone-B': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Zone-B.ics',
+            'Zone-C': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Zone-C.ics',
+            'Corse': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Corse.ics',
+            'Guadeloupe': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Guadeloupe.ics',
+            'Guyane': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Guyane.ics',
+            'Martinique': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Martinique.ics',
+            'Mayotte': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Mayotte.ics',
+            'NouvelleCaledonie': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/NouvelleCaledonie.ics',
+            'Polynesie': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Polynesie.ics',
+            'Reunion': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/Reunion.ics',
+            'SaintPierreEtMiquelon': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/SaintPierreEtMiquelon.ics',
+            'WallisEtFutuna': 'https://fr.ftp.opendatasoft.com/openscol/fr-en-calendrier-scolaire/WallisEtFutuna.ics'
+        };
+
+        const zoneNames = {
+            'Zone-A': 'Zone A',
+            'Zone-B': 'Zone B',
+            'Zone-C': 'Zone C',
+            'Corse': 'Corse',
+            'Guadeloupe': 'Guadeloupe',
+            'Guyane': 'Guyane',
+            'Martinique': 'Martinique',
+            'Mayotte': 'Mayotte',
+            'NouvelleCaledonie': 'Nouvelle Calédonie',
+            'Polynesie': 'Polynésie',
+            'Reunion': 'La Réunion',
+            'SaintPierreEtMiquelon': 'Saint-Pierre-et-Miquelon',
+            'WallisEtFutuna': 'Wallis et Futuna'
+        };
+
+        let currentZone = null;
+
+        // Gestion des cookies
+        function checkCookieConsent() {
+            const consent = localStorage.getItem('cookieConsent');
+            if (!consent) {
+                setTimeout(() => {
+                    document.getElementById('cookieBanner').classList.add('show');
+                }, 1000);
+            } else if (consent === 'accepted') {
+                initGeolocation();
+            }
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookieConsent', 'accepted');
+            document.getElementById('cookieBanner').classList.remove('show');
+            initGeolocation();
+        }
+
+        function declineCookies() {
+            localStorage.setItem('cookieConsent', 'declined');
+            document.getElementById('cookieBanner').classList.remove('show');
+            document.getElementById('detectedZone').innerHTML = '<span class="loading">Veuillez sélectionner manuellement</span>';
+        }
+
+        function updateDownloadButton(zone) {
+            currentZone = zone;
+            const downloadBtn = document.getElementById('downloadBtn');
+            const detectedZone = document.getElementById('detectedZone');
+            
+            if (zone && calendriers[zone]) {
+                detectedZone.innerHTML = zoneNames[zone];
+                downloadBtn.href = calendriers[zone];
+                downloadBtn.style.display = 'inline-block';
+                downloadBtn.download = `calendrier-scolaire-${zone}.ics`;
+            } else {
+                detectedZone.innerHTML = '<span class="loading">Zone non détectée</span>';
+                downloadBtn.style.display = 'none';
+            }
+        }
+
+        function detectZoneFromLocation(latitude, longitude) {
+            // Détection basique par coordonnées GPS
+            // France métropolitaine
+            if (latitude >= 41 && latitude <= 51 && longitude >= -5 && longitude <= 10) {
+                // Corse
+                if (latitude >= 41.3 && latitude <= 43.1 && longitude >= 8.5 && longitude <= 9.6) {
+                    return 'Corse';
+                }
+                // Par défaut Zone B pour la France métropolitaine (peut être affiné)
+                return 'Zone-B';
+            }
+            // DOM-TOM approximatifs
+            if (latitude >= 15 && latitude <= 17 && longitude >= -62 && longitude <= -60) return 'Guadeloupe';
+            if (latitude >= 14 && latitude <= 15 && longitude >= -61.5 && longitude <= -60) return 'Martinique';
+            if (latitude >= 2 && latitude <= 6 && longitude >= -55 && longitude <= -51) return 'Guyane';
+            if (latitude >= -21.5 && latitude <= -20.5 && longitude >= 55 && longitude <= 56) return 'Reunion';
+            if (latitude >= -13 && latitude <= -12 && longitude >= 45 && longitude <= 46) return 'Mayotte';
+            
+            return null;
+        }
+
+        function initGeolocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const zone = detectZoneFromLocation(position.coords.latitude, position.coords.longitude);
+                        updateDownloadButton(zone);
+                    },
+                    (error) => {
+                        console.log('Erreur de géolocalisation:', error);
+                        document.getElementById('detectedZone').innerHTML = '<span class="loading">Veuillez sélectionner manuellement</span>';
+                    }
+                );
+            } else {
+                document.getElementById('detectedZone').innerHTML = '<span class="loading">Géolocalisation non disponible</span>';
+            }
+        }
+
+        // Sélection manuelle
+        document.getElementById('zoneSelect').addEventListener('change', (e) => {
+            if (e.target.value) {
+                updateDownloadButton(e.target.value);
+            }
+        });
+
+        // Vérifier le consentement au chargement
+        checkCookieConsent();
+    </script>
+</body>
+</html>
